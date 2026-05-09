@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+data/raw/
+models/
+.env
+
+# Scripts internos de generacion de datos (no exponer)
+generate_data.py
+**/generate_data.py
