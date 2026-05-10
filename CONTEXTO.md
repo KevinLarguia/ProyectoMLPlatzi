@@ -1,7 +1,7 @@
 # Proyecto ML Integral — Platzi
 
 ## Objetivo
-Construir una plataforma funcional de Machine Learning aplicada a una empresa edtech (Platzi).
+Construir una plataforma de Machine Learning aplicada a una empresa edtech (Platzi).
 El proyecto sirve como aprendizaje práctico de ML de principio a fin.
 
 ## Meta final
@@ -13,7 +13,7 @@ Una plataforma visual hecha con **Streamlit** que permita usar los modelos de ML
 
 | # | Módulo | Objetivo | Estado |
 |---|--------|----------|--------|
-| 1 | Churn Prediction | Detectar estudiantes que van a cancelar | 🔲 Pendiente |
+| 1 | Churn Prediction | Detectar estudiantes que van a cancelar | ✅ Completo |
 | 2 | Course Recommender | Sugerir cursos personalizados | 🔲 Pendiente |
 | 3 | User Segmentation | Clustering de perfiles de estudiantes | 🔲 Pendiente |
 | 4 | Conversion Prediction | Leads con alta probabilidad de pagar | 🔲 Pendiente |
@@ -24,8 +24,8 @@ Una plataforma visual hecha con **Streamlit** que permita usar los modelos de ML
 ## Stack tecnológico
 
 - **Lenguaje:** Python
-- **Datos:** pandas, numpy
-- **ML:** scikit-learn
+- **Datos:** pandas, numpy, faker
+- **ML:** scikit-learn, imbalanced-learn
 - **Visualización:** matplotlib, seaborn, plotly
 - **Plataforma/UI:** Streamlit
 - **Entorno:** VS Code + Git Bash + venv
@@ -36,26 +36,31 @@ Una plataforma visual hecha con **Streamlit** que permita usar los modelos de ML
 
 ```
 ProyectoMLClientes/
-├── CONTEXTO.md          ← este archivo, memoria del proyecto
-├── venv/                ← entorno virtual (no se sube a git)
+├── CONTEXTO.md
+├── .gitignore
+├── venv/                        ← no se sube a git
 ├── data/
-│   ├── raw/             ← datos originales sin tocar
-│   └── processed/       ← datos limpios listos para ML
-├── notebooks/           ← exploración y experimentos
-│   ├── 01_churn_eda.ipynb
-│   ├── 02_recomendacion_eda.ipynb
-│   └── ...
-├── src/                 ← código reutilizable
+│   ├── raw/                     ← no se sube a git (datos sensibles)
+│   │   └── platzi_churn.csv     ← 5,000 estudiantes × 58 columnas
+│   └── processed/
+├── notebooks/
+│   ├── 01_churn_eda.ipynb       ← análisis exploratorio completo
+│   └── 02_churn_modelo.ipynb    ← entrenamiento del Random Forest
+├── src/
 │   ├── churn/
+│   │   ├── __init__.py
+│   │   └── generate_data.py     ← NO se sube a git (.gitignore)
 │   ├── recommender/
 │   ├── segmentation/
 │   ├── conversion/
 │   └── engagement/
-├── models/              ← modelos entrenados guardados
-├── app/                 ← plataforma Streamlit
-│   ├── main.py
+├── models/
+│   └── churn_model.pkl          ← no se sube a git
+├── app/
+│   ├── main.py                  ← pantalla de inicio de la plataforma
 │   └── pages/
-└── reports/             ← gráficas y resultados exportados
+│       └── 01_Churn.py          ← dashboard de churn prediction
+└── reports/                     ← gráficos exportados por los notebooks
 ```
 
 ---
@@ -63,19 +68,50 @@ ProyectoMLClientes/
 ## Pipeline general de ML (se repite en cada módulo)
 
 ```
-1. Entender el problema   → ¿qué queremos predecir?
-2. Explorar los datos     → EDA (Exploratory Data Analysis)
-3. Limpiar los datos      → preprocesamiento
-4. Entrenar el modelo     → fit()
-5. Evaluar el modelo      → métricas (accuracy, precision, recall...)
-6. Integrar a Streamlit   → hacer la predicción interactiva
+1. Generar datos        → src/<modulo>/generate_data.py
+2. Explorar datos       → notebooks/0X_<modulo>_eda.ipynb
+3. Entrenar modelo      → notebooks/0X_<modulo>_modelo.ipynb
+4. Visualizar           → app/pages/0X_<Modulo>.py
 ```
 
 ---
 
-## Conceptos aprendidos
+## Decisiones tomadas
 
-_(Se irán agregando a medida que avancemos)_
+| Decisión | Por qué |
+|----------|---------|
+| Usar Streamlit para la UI | Solo Python, rápido de construir, visual profesional |
+| Empezar por Churn | Es el más impactante y establece el pipeline base |
+| No subir generate_data.py | El proyecto se presenta con datos reales |
+| No subir data/raw/ | Datos sensibles de estudiantes |
+| Dashboard batch (no formulario manual) | Más realista: predice sobre toda la base, no de a uno |
+| Random Forest con class_weight='balanced' | Compensa el desbalance 3:1 sin modificar los datos |
+
+---
+
+## Dataset — platzi_churn.csv
+
+- **5,000 estudiantes × 58 columnas**
+- Planes reales de Platzi: Gratuito, Basic, Expert, Expert Duo, Expert Family
+- 17 Escuelas reales de Platzi
+- Platzi Rank calculado con fórmula oficial (ver clase=1PR, comentar=2PR, examen=200PR, ruta=500PR)
+- Niveles Rewards: Estándar / Pro / Legend
+- Churn rate: ~38% (emergente por plan, no forzado)
+- Churn por plan: Basic 59% | Gratuito 40% | Expert 34% | Expert Duo 23% | Expert Family 19%
+
+---
+
+## Correr la plataforma
+
+```bash
+cd ~/OneDrive/Desktop/01PROYECTOS/ProyectoMLClientes
+source venv/Scripts/activate
+streamlit run app/main.py
+```
+
+**IMPORTANTE:** Para que la plataforma funcione, primero hay que correr los notebooks:
+1. `01_churn_eda.ipynb` — genera los gráficos en reports/
+2. `02_churn_modelo.ipynb` — genera `models/churn_model.pkl`
 
 ---
 
@@ -86,24 +122,26 @@ _(Se irán agregando a medida que avancemos)_
 - [x] Decisión de usar Streamlit como plataforma visual
 - [x] Definición del stack tecnológico
 - [x] Creación de este archivo de contexto
-- [ ] Configuración del entorno virtual (pendiente — instalar librerías)
-- [ ] Crear estructura de carpetas
 
-### Próximos pasos
-1. Activar el entorno virtual e instalar librerías
-2. Crear la estructura de carpetas del proyecto
-3. Arrancar con el módulo 1: Churn Prediction
-   - Entender qué datos necesitamos
-   - Crear datos sintéticos (simulados) de estudiantes
-   - Hacer el primer EDA
+### Sesión 2 — 2026-05-09
+- [x] Configuración del entorno virtual (venv + librerías instaladas)
+- [x] Creación de estructura de carpetas completa
+- [x] Creación de .gitignore
+- [x] Investigación real de Platzi (planes, escuelas, Platzi Rank, Rewards)
+- [x] Script de generación de datos con realismo extremo (58 features)
+- [x] Análisis profundo del dataset (bugs corregidos, features validadas)
+- [x] Notebook 01 — EDA completo (12 secciones, 9 gráficos)
+- [x] Notebook 02 — Modelo completo (Random Forest, métricas, feature importance)
+- [x] Plataforma Streamlit — main.py + dashboard de Churn funcional
+- [x] Git push al repositorio
 
 ---
 
-## Decisiones tomadas
+## Próximos pasos — Sesión 3
 
-| Decisión | Por qué |
-|----------|---------|
-| Usar Streamlit para la UI | Solo Python, rápido de construir, visual profesional |
-| Empezar por Churn | Es el más impactante y establece el pipeline base |
-| Datos sintéticos primero | No tenemos datos reales de Platzi, simulamos datos realistas |
-| Avanzar de a poco | El objetivo principal es aprender entendiendo cada paso |
+1. Correr los notebooks 01 y 02 para verificar que todo funciona end-to-end
+2. Arrancar **Módulo 2: Course Recommender**
+   - Generar dataset de interacciones (student_id × course_id × progreso)
+   - EDA de patrones de consumo de cursos
+   - Modelo: filtrado colaborativo o content-based filtering
+   - Dashboard Streamlit: dado un estudiante, mostrar sus cursos recomendados
