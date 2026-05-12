@@ -87,9 +87,6 @@ pip install pandas numpy scikit-learn matplotlib seaborn plotly streamlit joblib
 # 4. Levantar la plataforma
 streamlit run app/main.py
 ```
-<img width="654" height="584" alt="output4" src="https://github.com/user-attachments/assets/643463ff-c0d0-44b4-967a-f1e3f600991a" />
-<img width="574" height="584" alt="output3" src="https://github.com/user-attachments/assets/dacd1385-9b76-4d7a-99ee-c6288905dd61" />
-
 ---
 
 ## Próximamente
