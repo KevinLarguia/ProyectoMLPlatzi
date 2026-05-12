@@ -37,7 +37,7 @@ El modelo analiza 39 señales de comportamiento por estudiante:
 El resultado es una probabilidad de churn de 0% a 100% por cada estudiante, clasificada en tres niveles de riesgo.
 
 ### Dashboard
-
+<img width="1917" height="915" alt="capturadash" src="https://github.com/user-attachments/assets/5d361484-3f68-4bfe-ac6c-cec8168eaea9" />
 El dashboard corre sobre toda la base de estudiantes en tiempo real:
 
 - Métricas globales de riesgo
@@ -45,6 +45,7 @@ El dashboard corre sobre toda la base de estudiantes en tiempo real:
 - Riesgo segmentado por Plan, País y Escuela
 - Tabla interactiva con filtros por nivel de riesgo
 - Exportación de listas para campañas de retención
+
 
 ### Stack
 
@@ -86,6 +87,10 @@ pip install pandas numpy scikit-learn matplotlib seaborn plotly streamlit joblib
 # 4. Levantar la plataforma
 streamlit run app/main.py
 ```
+<img width="654" height="584" alt="output4" src="https://github.com/user-attachments/assets/643463ff-c0d0-44b4-967a-f1e3f600991a" />
+<img width="574" height="584" alt="output3" src="https://github.com/user-attachments/assets/dacd1385-9b76-4d7a-99ee-c6288905dd61" />
+<img width="986" height="784" alt="output2" src="https://github.com/user-attachments/assets/111bae70-2fa1-4b97-8300-813ea128c3af" />
+<img width="984" height="484" alt="output1" src="https://github.com/user-attachments/assets/92a118c2-3f84-4573-ad2f-52c50eba6e69" />
 
 ---
 
