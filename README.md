@@ -47,7 +47,7 @@ El dashboard corre sobre toda la base de estudiantes en tiempo real:
 - Exportación de listas para campañas de retención
 
 
-### Stack
+### Stack Tecnologico
 
 ```
 Python · pandas · scikit-learn · Streamlit · Plotly
